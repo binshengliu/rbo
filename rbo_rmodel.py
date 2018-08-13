@@ -13,10 +13,8 @@ because of this are highlighted with comments.
 
 """
 
-import sys
 import rbo
 import argparse
-import numpy as np
 import lxml.etree as ET
 
 
