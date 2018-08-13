@@ -35,18 +35,16 @@ def parse_args():
 
 
 def parse_run(lines):
-    d = {}
+    qno_list = {}
     for l in lines:
-        q, _, docno, _, _, _ = l.split()
-        if q not in d:
-            d[q] = []
-        d[q].append(docno)
-    return d
+        qno, _, docno, _, _, _ = l.split()
+        qno_list.setdefault(qno, []).append(docno)
+    return qno_list
 
 
 def main():
     args = parse_args()
-    print('p: {}'.format(args.p), file=sys.stderr)
+    p = args.p
 
     lines1 = args.file1.readlines()
     lines2 = args.file2.readlines()
@@ -61,24 +59,35 @@ def main():
         queries.sort()
 
     results = []
-    overlaps = []
-    totals = []
+    print('qno,intersection,union,p,min,res,ext')
     for q in queries:
-        result = rbo.rbo(run1[q], run2[q], args.p)
-        results.append(result)
+        # print(run1[q])
+        # print(run2[q])
+        # return
+        result = rbo.rbo(run1[q], run2[q], p)
         overlap = len(set(run1[q]) & set(run2[q]))
         total = len(set(run1[q]) | set(run2[q]))
-        overlaps.append(overlap)
-        totals.append(total)
-        print('{} {}/{}: {}'.format(q, overlap, total, result))
+        current = {
+            'qno': q,
+            'intersection': overlap,
+            'union': total,
+            'p': p,
+            'min': result['min'],
+            'res': result['res'],
+            'ext': result['ext']
+        }
+        results.append(current)
+        print('{},{},{},{},{:f},{:f},{:f}'.format(
+            q, overlap, total, p, result['min'], result['res'], result['ext']))
 
     min_mean = np.mean([r['min'] for r in results])
     res_mean = np.mean([r['res'] for r in results])
     ext_mean = np.mean([r['ext'] for r in results])
-    overlap_mean = np.mean(overlaps)
-    total_mean = np.mean(totals)
-    print('Mean {}/{}: {{min: {}, res: {}, ext: {}}}'.format(
-        overlap_mean, total_mean, min_mean, res_mean, ext_mean))
+    overlap_mean = np.mean([r['intersection'] for r in results])
+    total_mean = np.mean([r['union'] for r in results])
+    print('{},{},{},{},{:f},{:f},{:f}'.format('mean', overlap_mean, total_mean,
+                                              p, min_mean, res_mean, ext_mean))
+    return results
 
 
 if __name__ == '__main__':
