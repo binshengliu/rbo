@@ -57,20 +57,28 @@ def main():
     queries = list(run1.keys() & run2.keys())
     try:
         queries.sort(key=int)
-    except:
+    except ValueError:
         queries.sort()
 
     results = []
+    overlaps = []
+    totals = []
     for q in queries:
-        result = rbo.rbo(list(run1[q]), list(run2[q]), args.p)
+        result = rbo.rbo(run1[q], run2[q], args.p)
         results.append(result)
-        print('{}: {}'.format(q, result))
+        overlap = len(set(run1[q]) & set(run2[q]))
+        total = len(set(run1[q]) | set(run2[q]))
+        overlaps.append(overlap)
+        totals.append(total)
+        print('{} {}/{}: {}'.format(q, overlap, total, result))
 
     min_mean = np.mean([r['min'] for r in results])
     res_mean = np.mean([r['res'] for r in results])
     ext_mean = np.mean([r['ext'] for r in results])
-    print('Mean: {{min: {}, res: {}, ext: {}}}'.format(min_mean, res_mean,
-                                                       ext_mean))
+    overlap_mean = np.mean(overlaps)
+    total_mean = np.mean(totals)
+    print('Mean {}/{}: {{min: {}, res: {}, ext: {}}}'.format(
+        overlap_mean, total_mean, min_mean, res_mean, ext_mean))
 
 
 if __name__ == '__main__':
