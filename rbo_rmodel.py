@@ -80,13 +80,13 @@ def rbo_rmodel_xml(xml1, xml2, p):
         print('{},{},{},{},{:f},{:f},{:f}'.format(
             q, overlap, total, p, result['min'], result['res'], result['ext']))
 
-    min_mean = np.mean([r['min'] for r in results])
-    res_mean = np.mean([r['res'] for r in results])
-    ext_mean = np.mean([r['ext'] for r in results])
-    overlap_mean = np.mean([r['intersection'] for r in results])
-    total_mean = np.mean([r['union'] for r in results])
-    print('{},{},{},{},{:f},{:f},{:f}'.format('mean', overlap_mean, total_mean,
-                                              p, min_mean, res_mean, ext_mean))
+    # min_mean = np.mean([r['min'] for r in results])
+    # res_mean = np.mean([r['res'] for r in results])
+    # ext_mean = np.mean([r['ext'] for r in results])
+    # overlap_mean = np.mean([r['intersection'] for r in results])
+    # total_mean = np.mean([r['union'] for r in results])
+    # print('{},{},{},{},{:f},{:f},{:f}'.format('mean', overlap_mean, total_mean,
+    #                                           p, min_mean, res_mean, ext_mean))
     return results
 
 
