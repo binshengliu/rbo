@@ -62,6 +62,8 @@ def rbo_rmodel_xml(xml1, xml2, p):
         # print(rm1[q])
         # print(rm2[q])
         # return
+        if not rm1[q] or not rm2[q]:
+            continue
         result = rbo.rbo_dict(rm1[q], rm2[q], p)
         overlap = len(set(rm1[q]) & set(rm2[q]))
         total = len(set(rm1[q]) | set(rm2[q]))
